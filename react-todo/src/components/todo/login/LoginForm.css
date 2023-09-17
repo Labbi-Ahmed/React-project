@@ -1,0 +1,43 @@
+/* label, input {
+    margin: 5px;
+    padding: 5px;
+}
+
+.input-from{
+    display: flex;
+    flex-direction: column;
+}
+
+.submit{
+    
+
+    margin-top: 10px;
+    padding: 1rem;
+    background-color: rgb(58, 178, 233);
+    color: black;
+    border-radius: 5px;
+}
+
+.submit:hover{
+    background-color: aliceblue;
+}
+
+.submit-div{
+    margin: auto;
+    width: 35%;
+}
+
+.login{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    text-align: left;
+    margin: auto;
+    padding: 10px;
+}
+
+.login-input{
+    display: flex;
+    flex-direction: column;
+    
+} */

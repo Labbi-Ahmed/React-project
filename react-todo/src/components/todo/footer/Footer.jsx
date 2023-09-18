@@ -9,7 +9,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="container">
         <hr />
-        Footer {authContext.number}
+        Footer
       </div>
     </footer>
   );

@@ -20,6 +20,7 @@ export default function AuthProvider({ children }) {
   }
 
   function logout() {
+    setUsername("")
     setAuthenticated(false);
   }
 

@@ -1,61 +1,62 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../security/AuthContext";
+import { deleteTodoFromDB, retriveAllTodosForUserName } from "../api/TodosApiService";
+import {  useNavigate } from "react-router-dom";
 
 export default function ListTodo() {
-  const today = new Date();
-
-  const targetDate = new Date(
-    today.getFullYear() + 12,
-    today.getMonth(),
-    today.getDay()
-  );
-
-  const todos = [
-    { id: 1, description: "Learn Java", done: false, targetDate: targetDate },
-    { id: 2, description: "Learn AWS", done: false, targetDate: targetDate },
-    { id: 3, description: "Learn CSS", done: false, targetDate: targetDate },
-    { id: 4, description: "Learn Spring", done: false, targetDate: targetDate },
-    {
-      id: 5,
-      description: "Learn Spring boot",
-      done: false,
-      targetDate: targetDate,
-    },
-  ];
-
+  
   const [data, setData] = useState([])
-  const url =
-    `http://localhost:8080/api/v1/todos/labbi@gmail.com`;
+  const [message , setMessage] = useState("")
+  const authContext = useAuth();
+  const username = authContext.username;
+  const navigate = useNavigate();
 
-
-  useEffect(() => {
-    fetch(url)
-      .then((response) => response.json())
-      .then((responseData) => {setData(responseData)})
+  function refrashTodos() {
+    retriveAllTodosForUserName(username)
+      .then((response) => {setData(response.data)})
       .catch((error) => console.error("Error to fetching data: ", error));
-    }, []);
+  }
+  useEffect(() => refrashTodos(),[]);
+  
+  function deleteTodoById(id){
+    deleteTodoFromDB(username, id).then(()=>{
+      setMessage(`Delete of todo with id=${id} successful`)
+      refrashTodos()})
+    .catch(err => console.log(err))
+    //console.log("click " +id);
+  }
 
-    console.log(data);
+  function updateTodo(id){
+    navigate(`/todo/${id}`)
+  }
+
+
+
+
   return (
     <div className="container">
       <h1>Things you to do. </h1>
+      {message && <div className="alert alert-warning">{message}</div>}
       <table className="table border">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Description</th>
             <th>Is Done?</th>
             <th>Target Date</th>
+            <th>Delete</th>
+            <th>Update</th>
           </tr>
         </thead>
 
         <tbody>
           {data.map((dt) => (
             <tr key={dt.id}>
-              <td>{dt.id}</td>
-              <td>{dt.descripton}</td>
+              <td>{dt.description}</td>
               <td>{dt.done.toString()}</td>
-              <td>{dt.targetDate}</td>
+              <td>{dt.targetDate.toString()}</td>
+              <td><button className="btn btn-warning" onClick={() => deleteTodoById(dt.id)}>Delete</button></td>
+              <td><button className="btn btn-success" onClick={() => updateTodo(dt.id)}>Update</button></td>
+
             </tr>
           ))}
         </tbody>
